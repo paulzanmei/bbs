@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paul.bs.mapper.GrabCountryMapper">
+
+	<resultMap type="com.paul.bs.pojo.GrabCountryPOJO" id="grabCountryPOJO">
+		<id column="id" property="id" />
+		<result column="name" property="name"/>
+		<result column="key" property="key"/>
+		<collection property="grabCompanys" ofType="com.paul.bs.pojo.GrabCompanyPOJO">
+			<id column="gcm_id" property="id"/>
+			<result column="gcm_name" property="name"/>
+			<result column="gcm_url" property="url"/>
+			<result column="gcm_grab_country_id" property="grabCountryId"/>
+			<collection property="grabCompanyInfos" ofType="com.paul.bs.pojo.GrabCompanyInfoPOJO">
+				<id column="gcminfo_id" property="id"/>
+				<result column="gcminfo_grab_company_id" property="grabCompanyId"/>
+				<result column="gcminfo_email" property="email"/>
+				<result column="gcminfo_domain_name" property="domainName"/>
+				<result column="gcminfo_email_name" property="emailName"/>
+			</collection>
+		</collection>		
+	</resultMap>
+
+
+	<insert id="insert" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `grab_country`(`name`,`key`)value
+		<foreach collection="list" item="item" open="" separator="," close="">
+			(#{item.name},#{item.key})
+		</foreach>
+	</insert>
+	
+	<select id="selectRelation" resultMap="grabCountryPOJO">
+		SELECT gcu.id as id,
+			   gcu.`name` as `name`,
+			   gcu.`key` as `key`,
+			   gcm.id as gcm_id,
+			   gcm.`name` as gcm_name,
+			   gcm.url as gcm_url,
+			   gcm.`grab_country.id` as gcm_grab_country_id,
+			   gcminfo.id as gcminfo_id,
+			   gcminfo.email as gcminfo_email,
+			   gcminfo.email_name as gcminfo_email_name,
+			   gcminfo.domain_name as gcminfo_domain_name,
+			   gcminfo.`grab_company.id` as gcminfo_grab_company_id
+		FROM 
+			grab_country  gcu,
+			grab_company gcm,
+			grab_company_info gcminfo
+		WHERE gcu.id = gcm.`grab_country.id`
+		AND   gcm.id = gcminfo.`grab_company.id`
+		AND gcu.id = #{id}
+	</select>
+	
+	
+</mapper>
