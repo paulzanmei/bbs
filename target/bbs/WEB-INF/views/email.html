@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>email</title>
+<link rel="stylesheet" href="css/bootstrap.css" />
+<link rel="stylesheet" href="css/css.css" />
+<link rel="stylesheet" href="css/zTreeStyle/zTreeStyle.css"/>
+<script type="text/javascript" src="js/jquery1.9.0.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/sdmenu.js"></script>
+<script type="text/javascript" src="js/laydate/laydate.js"></script>
+<script type="text/javascript" src="js/jquery.ztree.all.js"></script>
+</head>
+<body>
+<div class="right_cont">
+<ul class="breadcrumb">当前位置：
+  <a href="#">首页</a> <span class="divider">/</span>
+  <a href="#">发送邮件</a> <span class="divider">/</span>
+  批量发送
+</ul>
+   <div class="title_right"><strong>批量选择客户邮件发送</strong></div>  
+   
+   <div style="width: 400px;float: left;overflow: scroll;height: 440px;">
+   		<ul id="treeDemo" class="ztree"></ul>
+   </div>
+   
+   <div style="width:700px; margin-left: 415px;">
+        <button class="btn btn-info" data-dismiss="modal" aria-hidden="true" style="width:80px">发送</button> 
+   
+       <table class="table table-bordered table-hover table-striped">
+         <tbody>
+           <tr align="center">
+           	<!-- <td><input type="checkbox"></td> -->
+             <td><strong>国家</strong></td>
+             <td><strong>城市</strong></td>
+             <td><strong>公司名称</strong></td>
+             <td><strong>邮箱</strong></td>
+             <td><strong>名称</strong></td>
+           </tr>
+           <tr align="center">
+           	<!-- <td><input type="checkbox"></td> -->
+             <td>美国</td>
+             <td>美国</td>
+             <td>美国</td>
+             <td>5232522@qq.com</td>
+             <td>5232522</td>
+           </tr>
+         </tbody>
+       </table>
+   </div>
+     </div>
+     
+     
+     <script language="JavaScript">
+   var zTreeObj;
+   // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+   var setting = {
+			check: {
+				enable: true
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			}
+		};
+   // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+   var zNodes = [
+   {id:1, pId:0,name:"美国", open:true, children:[
+      {id:2, pId:1,name:"美国城市",open:false,children:[{name:"美国公司"}]}, {name:"美国城市",open:false,children:[{name:"美国公司"}]}]},
+   {name:"美国", open:true, children:[
+      {name:"美国城市",open:false,children:[{name:"美国公司"}]}, {name:"美国城市",open:false,children:[{name:"美国公司"}]}]}
+   ];
+   
+   
+   $(document).ready(function(){
+	   jQuery.ajax({
+		   url:"emailsend/emaildata",
+		   data:{id:259},
+		   success:function(data){
+		      zTreeObj = $.fn.zTree.init($("#treeDemo"), setting,data);	   
+		   }
+	   });
+	   
+   });
+  </script>
+</body>
+</html>
