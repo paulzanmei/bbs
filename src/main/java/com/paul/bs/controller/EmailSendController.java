@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.paul.bs.po.GrabCountry;
+import com.paul.bs.pojo.GrabCompanyPOJO;
 import com.paul.bs.pojo.GrabCountryPOJO;
 import com.paul.bs.service.EmailService;
 import com.paul.bs.vo.TreeData;
@@ -30,7 +32,8 @@ public class EmailSendController {
 	private EmailService emailService;
 	
 	@RequestMapping
-	public String indext(){
+	public String indext(ModelMap map){
+		map.put("grabcountrys", emailService.getAllGrabCountry());
 		return "email";
 	}
 	
@@ -43,9 +46,11 @@ public class EmailSendController {
 		return list;
 	}
 	
-	@RequestMapping(value="/send",method=RequestMethod.GET)
+	
+	
+	@RequestMapping(value="/send",method=RequestMethod.POST)
 	@ResponseBody
-	public ModelMap send(GrabCountryPOJO grabCountryPOJO){
+	public ModelMap send(@RequestBody List<GrabCompanyPOJO> grabCountryPOJO){
 		ModelMap map = new ModelMap();
 		Map<String, Object> model = new HashMap<String,Object>();
 		Map<String,File> files = new HashMap<>();

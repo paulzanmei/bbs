@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import com.paul.bs.po.GrabCountry;
+import com.paul.bs.pojo.GrabCompanyPOJO;
 import com.paul.bs.pojo.GrabCountryPOJO;
 
 public interface EmailService {
@@ -16,5 +18,7 @@ public interface EmailService {
 	 */
 	public List<GrabCountryPOJO> getEmailTreeList(Integer pId);
 	
-	public void send(GrabCountryPOJO grabCountryPOJO,final String subject,final String TomplateName,final Map<String, Object> model,final Map<String,File> files);
+	public void send(List<GrabCompanyPOJO> grabCountryPOJO,final String subject,final String TomplateName,final Map<String, Object> model,final Map<String,File> files);
+	
+	public List<GrabCountry> getAllGrabCountry();
 }

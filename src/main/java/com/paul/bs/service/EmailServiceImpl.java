@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.paul.bs.mapper.GrabCountryMapper;
+import com.paul.bs.po.GrabCountry;
+import com.paul.bs.pojo.GrabCompanyPOJO;
 import com.paul.bs.pojo.GrabCountryPOJO;
 
 @Service
@@ -37,7 +39,7 @@ public class EmailServiceImpl implements EmailService{
 	}
 
 	@Override
-	public void send(final GrabCountryPOJO grabCountryPOJO,final String subject,final String TomplateName,final Map<String,Object> model,final Map<String,File> files) {
+	public void send(final List<GrabCompanyPOJO> companyPOJOs,final String subject,final String TomplateName,final Map<String,Object> model,final Map<String,File> files) {
 		MimeMessagePreparator mimeMessagePreparator = new MimeMessagePreparator() {
 			@Override
 			public void prepare(MimeMessage mimeMessage) throws Exception {
@@ -64,6 +66,11 @@ public class EmailServiceImpl implements EmailService{
 		};
 		
 		this.javaMailSender.send(mimeMessagePreparator);
+	}
+
+	@Override
+	public List<GrabCountry> getAllGrabCountry() {
+		return grabCountryMapper.selectAll();
 	}
 
 }

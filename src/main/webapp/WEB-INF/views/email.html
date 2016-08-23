@@ -22,6 +22,13 @@
    <div class="title_right"><strong>批量选择客户邮件发送</strong></div>  
    
    <div style="width: 400px;float: left;overflow: scroll;height: 440px;">
+   		 <select name="select_grabCountry" id="select_grabCountry" class="select_grabCountry">
+               <option>无</option>
+               #foreach($grabCountry in $grabcountrys)
+               	<option value="$grabCountry.id">$grabCountry.name</option>
+               #end
+         </select>
+         <button class="btn btn-info" id="button_add" data-dismiss="modal" aria-hidden="true" style="width:80px">添加</button> 
    		<ul id="treeDemo" class="ztree"></ul>
    </div>
    
@@ -75,11 +82,52 @@
    
    
    $(document).ready(function(){
-	   jQuery.ajax({
-		   url:"emailsend/emaildata",
-		   data:{id:259},
-		   success:function(data){
-		      zTreeObj = $.fn.zTree.init($("#treeDemo"), setting,data);	   
+	   
+	   $("#select_grabCountry").change(function(){
+		   $("#treeDemo").empty();
+		   var ids = $("#select_grabCountry").val();
+		   jQuery.ajax({
+			   url:"emailsend/emaildata",
+			   data:{id:ids},
+			   success:function(data){
+			      zTreeObj = $.fn.zTree.init($("#treeDemo"), setting,data);	   
+			   }
+		   }); 
+	   });
+	   
+	   $("#button_add").click(function(){
+		   if(zTreeObj){
+			   var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+			   var nodes = treeObj.getCheckedNodes(true);
+			   //alert(JSON.stringify(nodes));
+			   //alert(nodes.length);
+			   var data = [];
+			   for(key in nodes){
+				   if(nodes[key].level==2){
+					   var grabCompanyId = nodes[key].grabCompanyId;
+					   var is = false;
+					   for(d in data){
+						   var dd = data[d];
+						  if(dd.id==grabCompanyId){
+							  data[d].grabCompanyInfos.push(nodes[key]);
+							  is = true;
+						  }
+					   }
+					   if(!is){
+						   data.push({id:grabCompanyId,grabCompanyInfos:[nodes[key]]});
+					   }
+				   }
+			   }
+			   jQuery.ajax({
+				   type:"post",
+				   url:"emailsend/send",
+				   contentType: "application/json",
+				   data:JSON.stringify(data),
+				   dataType: 'json',
+				   success:function(data){
+				      //zTreeObj = $.fn.zTree.init($("#treeDemo"), setting,data);	   
+				   }
+			   }); 
 		   }
 	   });
 	   
