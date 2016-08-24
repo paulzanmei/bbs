@@ -55,7 +55,12 @@ public class EmailSendController {
 		Map<String, Object> model = new HashMap<String,Object>();
 		Map<String,File> files = new HashMap<>();
 		files.put("a", new File(map.getClass().getResource("/img/log").getFile()));
-		emailService.send(grabCountryPOJO, "zhuti", "template/register.vm", model, files);
+		boolean is = emailService.send(grabCountryPOJO, "zhuti", "template/register.vm", model, files);
+		if(is){
+			map.put("msg", "ok");
+		}else{
+			map.put("msg", "发送失败！");
+		}
 		return map;
 	}
 }

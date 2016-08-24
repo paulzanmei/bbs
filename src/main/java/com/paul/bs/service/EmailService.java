@@ -18,7 +18,7 @@ public interface EmailService {
 	 */
 	public List<GrabCountryPOJO> getEmailTreeList(Integer pId);
 	
-	public void send(List<GrabCompanyPOJO> grabCountryPOJO,final String subject,final String TomplateName,final Map<String, Object> model,final Map<String,File> files);
+	public boolean send(List<GrabCompanyPOJO> grabCountryPOJO,final String subject,final String TomplateName,final Map<String, Object> model,final Map<String,File> files);
 	
 	public List<GrabCountry> getAllGrabCountry();
 }
