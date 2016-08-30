@@ -11,6 +11,8 @@
 <script type="text/javascript" src="js/sdmenu.js"></script>
 <script type="text/javascript" src="js/laydate/laydate.js"></script>
 <script type="text/javascript" src="js/jquery.ztree.all.js"></script>
+<script type="text/javascript" src="js/sockjs.min.js"></script>
+<script type="text/javascript" src="js/ckeditor/ckeditor.js"></script>
 </head>
 <body>
 <div class="right_cont">
@@ -33,14 +35,15 @@
    </div>
    
    <div style="width:700px; margin-left: 415px;">
-       <div style="width: 650px;height: 800px;border-color: ">
-       		
+       <div class="messagediv" style="padding:10px;width: 650px;height: 450px;background:#000; color:#FFF;overflow-y:auto;white-space:normal;word-break:break-all;">
        </div>
+       <textarea name="ckeditor"></textarea>
    </div>
      </div>
      
      
      <script language="JavaScript">
+   var sock;
    var zTreeObj;
    // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
    var setting = {
@@ -63,6 +66,8 @@
    
    
    $(document).ready(function(){
+	   
+	   CKEDITOR.replace("ckeditor");
 	   
 	   $("#select_grabCountry").change(function(){
 		   $("#treeDemo").empty();
@@ -113,6 +118,34 @@
 			   }); 
 		   }
 	   });
+	   
+	   
+	   //建立socket连接
+	   
+	  	 /* if ('WebSocket' in window) {
+	      sock = new WebSocket("ws://127.0.0.1/bbs/socketServer");
+	      } else if ('MozWebSocket' in window) {
+	        sock = new MozWebSocket("ws://bbs/socketServer");
+	      } else {
+	    	  
+	      } */
+	  	
+	  	sock = new SockJS("/bbs/sockjs/socketServer");
+	    /* sock.onopen = function (e) {
+	      console.log(e);
+	      }; */
+	      sock.onmessage = function (e) {
+	        console.log(e)
+	        var ms = "<samp>"+e.data+"<br/></samp>"
+	        $(".messagediv").append(ms);
+	      };
+	      sock.onerror = function (e) {
+	        console.log(e);
+	      };
+	      sock.onclose = function (e) {
+	        console.log(e);
+	      }
+	      
 	   
    });
   </script>
