@@ -1,7 +1,6 @@
 package com.paul.bs.service;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,13 +16,14 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.web.socket.TextMessage;
 
-import com.mysql.jdbc.Buffer;
 import com.paul.bs.mapper.GrabCountryMapper;
 import com.paul.bs.po.GrabCountry;
 import com.paul.bs.pojo.GrabCompanyInfoPOJO;
 import com.paul.bs.pojo.GrabCompanyPOJO;
 import com.paul.bs.pojo.GrabCountryPOJO;
+import com.paul.bs.socket.SocketHandler;
 
 @Service
 public class EmailServiceImpl implements EmailService{
@@ -34,6 +34,8 @@ public class EmailServiceImpl implements EmailService{
 	private JavaMailSender javaMailSender;
 	@Autowired
 	private VelocityEngine velocityEngine;
+	@Autowired
+	private SocketHandler socketHandler;
 	
 	private Logger logger = Logger.getLogger(EmailServiceImpl.class);
 	
@@ -118,21 +120,29 @@ public class EmailServiceImpl implements EmailService{
 							
 							
 							logger.info("开始发送:"+emails.toString());
-							javaMailSender.send(mimeMessagePreparator);
+							socketHandler.sendMessageToUsers(new TextMessage("开始发送:"+emails.toString()));
+							
+							//javaMailSender.send(mimeMessagePreparator);
+							
 							logger.info("发送成功!");
+							socketHandler.sendMessageToUsers(new TextMessage("发送成功!"));
 							logger.info("还有"+(length-count)+"家公司等待发送");
+							socketHandler.sendMessageToUsers(new TextMessage("还有"+(length-count)+"家公司等待发送"));
 					
 					}catch (MailException e) {
 						//错误日志
 						emails.deleteCharAt(emails.length()-1);
 						logger.error("发送失败："+emails.toString());
+						socketHandler.sendMessageToUsers(new TextMessage("发送失败："+emails.toString()));
 						logger.error(e.getMessage());
+						socketHandler.sendMessageToUsers(new TextMessage(e.getMessage()));
 					}
 					
 					if(count<length){
 						int a = (int)(1+Math.random()*10);
 						long b = a*(60*1000);
 						logger.info("停顿时间:"+a+"分钟");
+						socketHandler.sendMessageToUsers(new TextMessage("停顿时间:"+a+"分钟"));
 						try {
 							Thread.sleep(b);
 						} catch (InterruptedException e) {

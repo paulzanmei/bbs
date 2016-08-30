@@ -52,6 +52,10 @@ public class EmailSendController {
 	@ResponseBody
 	public ModelMap send(@RequestBody List<GrabCompanyPOJO> grabCountryPOJO){
 		ModelMap map = new ModelMap();
+		if(grabCountryPOJO.isEmpty()){
+			map.put("msg", "请选择要发送的公司");
+			return map;
+		}
 		Map<String, Object> model = new HashMap<String,Object>();
 		Map<String,File> files = new HashMap<>();
 		files.put("a", new File(map.getClass().getResource("/img/log").getFile()));
