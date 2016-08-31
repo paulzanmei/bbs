@@ -21,7 +21,7 @@
 	
 	
 	<context:component-scan base-package="com.paul.bs.controller"/>
-	<context:component-scan base-package="com.paul.bs.socket"/>
+	
 	
 	
 	<mvc:resources location="/css/" mapping="/css/**"/>
@@ -36,6 +36,8 @@
 		<property name="configLocation" value="classpath:template/velocity.properties"></property>
 	</bean>
 	<bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="exposeSpringMacroHelpers" value="true"/>
+		<property name="requestContextAttribute" value="rc"/>
 		<property name="suffix" value=".html"/>
 		<property name="contentType" value="text/html;charset=UTF-8"></property>
 	</bean>

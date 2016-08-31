@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>晶科物流管理系统</title>
-<link rel="stylesheet" href="css/bootstrap.css" />
-<link rel="stylesheet" href="css/css.css" />
-<link rel="stylesheet" href="css/zTreeStyle/zTreeStyle.css"/>
-<script type="text/javascript" src="js/jquery1.9.0.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/sdmenu.js"></script>
+<title>上海顶亚国际物流有限公司</title>
+<link rel="stylesheet" href="${rc.contextPath}/css/bootstrap.css" />
+<link rel="stylesheet" href="${rc.contextPath}/css/css.css" />
+<link rel="stylesheet" href="${rc.contextPath}/css/zTreeStyle/zTreeStyle.css"/>
+<script type="text/javascript" src="${rc.contextPath}/js/jquery1.9.0.min.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/sdmenu.js"></script>
 
 </head>
 
@@ -52,8 +52,8 @@ window.onload = function() {
 <div id="my_menu" class="sdmenu">
 	<div>
 		<span>发送邮件</span>
-		<a href="#">批量发送</a>
-		
+		<a href="#" data-url="${rc.contextPath}/email/send">批量发送</a>
+		<a href="#" data-url="${rc.contextPath}/email/template">模板</a>
 	</div>
 	<div class="collapsed">
 		<span>抓取邮箱</span>
@@ -76,27 +76,21 @@ window.onload = function() {
 
      <div class="right"  id="mainFrame">
      
-    <iframe src="emailsend" width="100%" name="mainContainer" id="mainContainer"  height="100%" frameborder="0"></iframe>
+    <iframe src="${rc.contextPath}/email/send" width="100%" name="mainContainer" id="mainContainer"  height="100%" frameborder="0"></iframe>
      
           
      </div>
     </div>
-    
-<!-- 底部 -->
-<div id="footer">版权所有：晶科客流 &copy; 2015&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.mycodes.net/" target="_blank">源码之家</a></div>
-    
-    
-
- <script>
-!function(){
-laydate.skin('molv');
-laydate({elem: '#Calendar'});
-}();
- 
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	 $("#my_menu div a").click(function(){
+		 $("#my_menu div a").removeClass("current");//class="current"
+		 $(this).addClass("current");
+		 var dataurl = $(this).attr("data-url");
+		 $("#mainContainer").attr("src",dataurl);
+	 });
+});
 </script>
-
-
-
- 
 </body>
 </html>

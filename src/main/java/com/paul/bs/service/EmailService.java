@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.paul.bs.po.GrabCountry;
+import com.paul.bs.po.GrabEmailTemplate;
 import com.paul.bs.pojo.GrabCompanyPOJO;
 import com.paul.bs.pojo.GrabCountryPOJO;
 
@@ -21,4 +22,12 @@ public interface EmailService {
 	public boolean send(List<GrabCompanyPOJO> grabCountryPOJO,final String subject,final String TomplateName,final Map<String, Object> model,final Map<String,File> files);
 	
 	public List<GrabCountry> getAllGrabCountry();
+	
+	public List<GrabEmailTemplate> selectList();
+	
+	public boolean insertTemplate(GrabEmailTemplate emailTemplate);
+	
+	public boolean updateByid(GrabEmailTemplate emailTemplate);
+	
+	public GrabEmailTemplate selectTemplateByid(Integer id);
 }

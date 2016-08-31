@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <title>email</title>
-<link rel="stylesheet" href="css/bootstrap.css" />
-<link rel="stylesheet" href="css/css.css" />
-<link rel="stylesheet" href="css/zTreeStyle/zTreeStyle.css"/>
-<script type="text/javascript" src="js/jquery1.9.0.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/sdmenu.js"></script>
-<script type="text/javascript" src="js/laydate/laydate.js"></script>
-<script type="text/javascript" src="js/jquery.ztree.all.js"></script>
-<script type="text/javascript" src="js/sockjs.min.js"></script>
+<link rel="stylesheet" href="${rc.contextPath}/css/bootstrap.css" />
+<link rel="stylesheet" href="${rc.contextPath}/css/css.css" />
+<link rel="stylesheet" href="${rc.contextPath}/css/zTreeStyle/zTreeStyle.css"/>
+<script type="text/javascript" src="${rc.contextPath}/js/jquery1.9.0.min.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/sdmenu.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/jquery.ztree.all.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/sockjs.min.js"></script>
 </head>
 <body>
 <div class="right_cont">
@@ -34,15 +34,14 @@
    </div>
    
    <div style="width:700px; margin-left: 415px;">
-       <div style="width: 650px;height: 800px;border-color: ">
-       		
+       <div class="messagediv" style="padding:10px;width: 650px;height: 450px;background:#000; color:#FFF;overflow-y:auto;white-space:normal;word-break:break-all;">
        </div>
    </div>
      </div>
      
      
      <script language="JavaScript">
-     var sock;
+   var sock;
    var zTreeObj;
    // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
    var setting = {
@@ -65,12 +64,12 @@
    
    
    $(document).ready(function(){
-	   
+
 	   $("#select_grabCountry").change(function(){
 		   $("#treeDemo").empty();
 		   var ids = $("#select_grabCountry").val();
 		   jQuery.ajax({
-			   url:"emailsend/emaildata",
+			   url:"${rc.contextPath}/email/emaildata",
 			   data:{id:ids},
 			   success:function(data){
 			      zTreeObj = $.fn.zTree.init($("#treeDemo"), setting,data);	   
@@ -103,7 +102,7 @@
 			   }
 			   jQuery.ajax({
 				   type:"post",
-				   url:"emailsend/send",
+				   url:"${rc.contextPath}/email/send",
 				   contentType: "application/json",
 				   data:JSON.stringify(data),
 				   dataType: 'json',
@@ -119,21 +118,22 @@
 	   
 	   //建立socket连接
 	   
-	   /*  if ('WebSocket' in window) {
-	      sock = new WebSocket("<%=wsPath%>socketServer");
+	  	 /* if ('WebSocket' in window) {
+	      sock = new WebSocket("ws://127.0.0.1/bbs/socketServer");
 	      } else if ('MozWebSocket' in window) {
-	        sock = new MozWebSocket("/socketServer");
+	        sock = new MozWebSocket("ws://bbs/socketServer");
 	      } else {
-	        
+	    	  
 	      } */
-	      
-	    sock = new SockJS("/bbs/socketServer");
-	    sock.onopen = function (e) {
+	  	
+	  	sock = new SockJS("${rc.contextPath}/sockjs/socketServer");
+	    /* sock.onopen = function (e) {
 	      console.log(e);
-	      };
+	      }; */
 	      sock.onmessage = function (e) {
 	        console.log(e)
-	        alert(e.data);
+	        var ms = "<samp>"+e.data+"<br/></samp>"
+	        $(".messagediv").append(ms);
 	      };
 	      sock.onerror = function (e) {
 	        console.log(e);

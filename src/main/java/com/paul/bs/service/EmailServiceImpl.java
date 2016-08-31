@@ -1,6 +1,7 @@
 package com.paul.bs.service;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +20,11 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.socket.TextMessage;
 
 import com.paul.bs.mapper.GrabCountryMapper;
+import com.paul.bs.mapper.GrabEmailTemplateMapper;
+import com.paul.bs.mapper.GrabMailSendInfoMapper;
 import com.paul.bs.po.GrabCountry;
+import com.paul.bs.po.GrabEmailTemplate;
+import com.paul.bs.po.GrabMailSendInfo;
 import com.paul.bs.pojo.GrabCompanyInfoPOJO;
 import com.paul.bs.pojo.GrabCompanyPOJO;
 import com.paul.bs.pojo.GrabCountryPOJO;
@@ -30,6 +35,10 @@ public class EmailServiceImpl implements EmailService{
 	
 	@Autowired
 	private GrabCountryMapper grabCountryMapper;
+	@Autowired
+	private GrabMailSendInfoMapper grabMailSendInfoMapper;
+	@Autowired
+	private GrabEmailTemplateMapper emailTemplateMapper;
 	@Autowired
 	private JavaMailSender javaMailSender;
 	@Autowired
@@ -126,6 +135,7 @@ public class EmailServiceImpl implements EmailService{
 							
 							logger.info("发送成功!");
 							socketHandler.sendMessageToUsers(new TextMessage("发送成功!"));
+							grabMailSendInfoMapper.insert(new GrabMailSendInfo(emails.toString(), "0", new Date(System.currentTimeMillis()), 1));
 							logger.info("还有"+(length-count)+"家公司等待发送");
 							socketHandler.sendMessageToUsers(new TextMessage("还有"+(length-count)+"家公司等待发送"));
 					
@@ -134,6 +144,7 @@ public class EmailServiceImpl implements EmailService{
 						emails.deleteCharAt(emails.length()-1);
 						logger.error("发送失败："+emails.toString());
 						socketHandler.sendMessageToUsers(new TextMessage("发送失败："+emails.toString()));
+						grabMailSendInfoMapper.insert(new GrabMailSendInfo(emails.toString(), "1", new Date(System.currentTimeMillis()), 1));
 						logger.error(e.getMessage());
 						socketHandler.sendMessageToUsers(new TextMessage(e.getMessage()));
 					}
@@ -153,6 +164,27 @@ public class EmailServiceImpl implements EmailService{
 			}
 		}
 		
+	}
+
+
+	@Override
+	public List<GrabEmailTemplate> selectList() {
+		return emailTemplateMapper.selectList();
+	}
+
+	@Override
+	public boolean insertTemplate(GrabEmailTemplate emailTemplate) {
+		return emailTemplateMapper.insert(emailTemplate)>0?true:false;
+	}
+
+	@Override
+	public boolean updateByid(GrabEmailTemplate emailTemplate) {
+		return emailTemplateMapper.updateByid(emailTemplate)>0?true:false;
+	}
+
+	@Override
+	public GrabEmailTemplate selectTemplateByid(Integer id) {
+		return emailTemplateMapper.selectByid(id);
 	}
 	
 }
