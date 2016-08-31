@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paul.bs.mapper.GrabEmailTemplateMapper">
+	<insert id="insert" parameterType="com.paul.bs.po.GrabEmailTemplate" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `grab_emailtemplate`(`name`,`title`,`html`,`createdtime`,`createdId`,`updatetime`,`updateId`)
+						value (#{name},#{title},#{html},#{createdTime},#{createdId},#{updateTime},#{updateId})
+	</insert>
+	<select id="selectByid" resultType="com.paul.bs.po.GrabEmailTemplate" parameterType="int">
+		SELECT G.id as id,
+				G.name as name,
+				G.title as title,
+				G.html as html,
+				G.createdtime as createdTime,
+				G.createdId as createdId,
+				G.updatetime as updateTime,
+				G.updateId as updateId
+			FROM `grab_emailtemplate` G
+		WHERE G.id = #{id}
+	</select>
+	<select id="selectList" resultType="com.paul.bs.po.GrabEmailTemplate">
+		SELECT G.id as id,
+				G.name as name,
+				G.title as title,
+				G.createdtime as createdTime,
+				G.createdId as createdId,
+				G.updatetime as updateTime,
+				G.updateId as updateId
+			FROM `grab_emailtemplate` G
+	</select>
+	<update id="updateByid" parameterType="com.paul.bs.po.GrabEmailTemplate">
+		UPDATE `grab_emailtemplate` G SET G.name = #{name},G.title = #{title},G.html = #{html} , G.updatetime = #{updateTime} , G.updateId = #{updateId} WHERE G.id = #{id}
+	</update>
+</mapper>

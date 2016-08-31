@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>晶科物流管理系统</title>
+<link rel="stylesheet" href="${rc.contextPath}/css/bootstrap.css" />
+<link rel="stylesheet" href="${rc.contextPath}/css/css.css" />
+<script type="text/javascript" src="${rc.contextPath}/js/jquery1.9.0.min.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/sdmenu.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/ckfinder/ckfinder.js"></script>
+</head>
+
+<body>
+
+     <div class="right_cont">
+<ul class="breadcrumb">当前位置：
+  <a href="#">首页</a> <span class="divider">/</span>
+  <a href="#">邮件发送</a> <span class="divider">/</span>
+  <a href="#">模板</a> <span class="divider">/</span>
+  修改
+</ul>
+   
+   <div class="title_right"><strong>修改</strong></div>  
+       <div style="width:1050px; margin:auto">
+       <table  class="margin-bottom-20 table  no-border" >
+        <tr>
+     	<td class="text-right"><input type="button" id="template_save" value="保存" class="btn btn-info " style="width:80px;" /> <input type="button" value="取消" class="btn btn-info " style="width:80px;" /></td>
+     </tr>
+ 	</table>
+       
+       <table class="table table-bordered" >
+     <tr>
+       <td width="12%" align="right" nowrap="nowrap" bgcolor="#f1f1f1">模板名称：</td>
+       <td width="88%"><input type="text" name="template_name" id="template_name" class="span1-1" value="$!template.name" /></td>
+     </tr>
+     <tr>
+       <td align="right" nowrap="nowrap" bgcolor="#f1f1f1">邮件标题：</td>
+       <td><input type="text" name="template_title" id="template_title" class="span1-1" value="$!template.title"/></td>
+     </tr>
+     <tr>
+       <td align="right" nowrap="nowrap" bgcolor="#f1f1f1">邮件正文：</td>
+       <td><textarea name="email_text" id="email_text" class="span10">$!template.html</textarea></td>
+       </tr>
+    
+ </table>
+
+   </div>
+     </div>     
+
+ <script type="text/javascript">
+ $(document).ready(function(){
+	var editor = CKEDITOR.replace("email_text");
+	CKFinder.setupCKEditor( editor, '${rc.contextPath}/ckfinder' );
+	 $("#template_save").click(function(){
+		 var text = editor.getData();
+		 var name = $("#template_name").val();
+		 var title  =$("#template_title").val();
+		 jQuery.ajax({
+			   type:"post",
+			   url:"${rc.contextPath}/email/template/edit",
+			   data:{"name":name,"title":title,"html":text,"id":$!template.id},
+			   success:function(data){
+				   if(data.msg=="ok"){
+					   alert("保存成功");
+					   window.location.href = "${rc.contextPath}/email/template";
+				   }else{
+					   alert(data.msg);
+				   }  
+			   }
+		 });
+	 });
+ });
+</script>
+
+
+
+ 
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paul.bs.mapper.GrabUserMapper">
+	<insert id="insert" parameterType="com.paul.bs.po.GrabUser" useGeneratedKeys="true" keyProperty="id">
+			INSERT INTO `grab_user`(`username`,`password`,`mail`,`mailpassword`,`createdTime`)
+							value (#{username},#{password},#{mail},#{mailpassword},#{createdTime})
+		</insert>
+		<select id="selectByid" resultType="com.paul.bs.po.GrabUser" parameterType="int">
+			SELECT G.id as id,
+					G.username as username,
+					G.password as password,
+					G.mail as mail,
+					G.mailpassword as mailpassword,
+					G.createdTime as createdTime
+				FROM `grab_user` G
+			WHERE G.id = #{id}
+	</select>
+</mapper>

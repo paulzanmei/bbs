@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paul.bs.mapper.GrabMailSendInfoMapper">
+	<insert id="insert" parameterType="com.paul.bs.po.GrabMailSendInfo" useGeneratedKeys="true" keyProperty="id">
+			INSERT INTO `grab_mailsend_info`(`mail`,`state`,`createdTime`,`createdId`)
+							value (#{mail},#{state},#{createdTime},#{createdId})
+		</insert>
+		<select id="selectByid" resultType="com.paul.bs.po.GrabMailSendInfo" parameterType="int">
+			SELECT G.id as id,
+					G.mail as mail,
+					G.state as state,
+					G.createdTime as createdTime,
+					G.createdId as createdId
+				FROM `grab_mailsend_info` G
+			WHERE G.id = #{id}
+	</select>
+</mapper>
