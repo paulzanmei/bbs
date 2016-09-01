@@ -29,7 +29,44 @@
                	<option value="$grabCountry.id">$grabCountry.name</option>
                #end
          </select>
-         <button class="btn btn-info" id="button_send"  aria-hidden="true" style="width:80px">发送</button> 
+         
+         <span class="margin-bottom-5"><a  class="btn btn-info btn-small"  id="modal-9735581" href="#modal-container-9735581" role="button" data-toggle="modal">发送邮件</a></span>
+         
+         <div id="modal-container-9735581" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:600px; margin-left:-300px; top:20%">
+				<div class="modal-header">
+					 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">
+						选择模板
+					</h3>
+				</div>
+				<div class="modal-body">
+				 <table class="table table-bordered">
+					  <tbody>
+					    
+					    <tr>
+					      <td align="right">选择模板:</td>
+					      <td align="left">
+					      	<select id="templateSelect">
+					               <option>无</option>
+					               #foreach($grabEmailTemplate in $grabEmailTemplates)
+					               	<option value="$grabEmailTemplate.id">$grabEmailTemplate.name</option>
+					               #end
+					         </select>
+					      </td>
+					    </tr>
+					    
+					  </tbody>
+				</table>
+				</div>
+				<div class="modal-footer">
+					 <button class="btn btn-info" data-dismiss="modal" aria-hidden="true" id="button_send" style="width:80px">发送</button> 
+                     <button class="btn btn-info" data-dismiss="modal" aria-hidden="true" style="width:80px">取消</button> 
+				</div>
+			</div>
+         
+         
+         
+      <!--    <button class="btn btn-info" id="button_send"  aria-hidden="true" style="width:80px">发送</button>  -->
    		<ul id="treeDemo" class="ztree"></ul>
    </div>
    
@@ -79,6 +116,7 @@
 	   
 	   $("#button_send").click(function(){
 		   if(zTreeObj){
+			  
 			   var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
 			   var nodes = treeObj.getCheckedNodes(true);
 			   //alert(JSON.stringify(nodes));
@@ -100,11 +138,18 @@
 					   }
 				   }
 			   }
+			   var templateId = $("#templateSelect").val();
+			   if(templateId=="无"){
+				   alert("请选择模板");
+				   return ;
+			   }
+			   var json = {"grabCountryPOJO":data,"tomplateId":templateId}
+			   $(".messagediv").html("");
 			   jQuery.ajax({
 				   type:"post",
 				   url:"${rc.contextPath}/email/send",
 				   contentType: "application/json",
-				   data:JSON.stringify(data),
+				   data:JSON.stringify(json),
 				   dataType: 'json',
 				   success:function(data){
 					   if(data.msg=="ok"){

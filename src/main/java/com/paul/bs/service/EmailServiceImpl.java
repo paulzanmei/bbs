@@ -2,6 +2,7 @@ package com.paul.bs.service;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +30,7 @@ import com.paul.bs.pojo.GrabCompanyInfoPOJO;
 import com.paul.bs.pojo.GrabCompanyPOJO;
 import com.paul.bs.pojo.GrabCountryPOJO;
 import com.paul.bs.socket.SocketHandler;
+import com.paul.bs.util.ImgUtil;
 
 @Service
 public class EmailServiceImpl implements EmailService{
@@ -55,8 +57,8 @@ public class EmailServiceImpl implements EmailService{
 	}
 
 	@Override
-	public boolean send(final List<GrabCompanyPOJO> companyPOJOs,final String subject,final String TomplateName,final Map<String,Object> model,final Map<String,File> files) {
-		Thread t = new Thread(new EmailSendRunnable(companyPOJOs,subject,TomplateName,model,files));
+	public boolean send(final List<GrabCompanyPOJO> companyPOJOs,final  Integer tomplateId) {
+		Thread t = new Thread(new EmailSendRunnable(companyPOJOs,tomplateId));
 		t.start();
 		return true;
 	}
@@ -70,24 +72,28 @@ public class EmailServiceImpl implements EmailService{
 	private class EmailSendRunnable implements Runnable{
 		
 		private List<GrabCompanyPOJO> companyPOJOs;
-		private String subject;
-		private String TomplateName;
-		private Map<String,Object> model;
-		private Map<String,File> files;
+		private Integer tomplateId;
 		
-		public  EmailSendRunnable(final List<GrabCompanyPOJO> companyPOJOs,final String subject,final String TomplateName,final Map<String,Object> model,final Map<String,File> files) {
+		public  EmailSendRunnable(final List<GrabCompanyPOJO> companyPOJOs,Integer tomplateId) {
 			// TODO Auto-generated constructor stub
 			this.companyPOJOs = companyPOJOs;
-			this.subject = subject;
-			this.TomplateName = TomplateName;
-			this.model = model;
-			this.files = files;
+			this.tomplateId = tomplateId;
 		}
 		
 		@Override
 		public void run() {
 			int count = 0;
 			int length = companyPOJOs.size();
+			final Map<String,File> files = new HashMap<>();
+			
+			GrabEmailTemplate emailTemplate = selectTemplateByid(tomplateId);
+			if(emailTemplate==null)
+				return;
+			final String subject = emailTemplate.getTitle();
+			Map<String,String> imgStrs = ImgUtil.getImgStr(emailTemplate.getHtml());
+			final String html = ImgUtil.replaceImgStr(emailTemplate.getHtml(), imgStrs);
+			ImgUtil.setImgFile(imgStrs, files);
+			
 			for (GrabCompanyPOJO grabCompanyPOJO : companyPOJOs) {
 				count++;
 				int i = grabCompanyPOJO.getId();
@@ -115,10 +121,9 @@ public class EmailServiceImpl implements EmailService{
 									mimeMessage.addHeader("X-Mailer", "Foxmail 7, 2, 7, 174[cn]");
 					                mimeMessage.addHeader("X-Priority", "3");
 									
-									String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, TomplateName, "utf-8", model);
+									//String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, TomplateName, "utf-8", model);
 									
-									//System.out.println(text);
-									messageHelper.setText(text, true);
+									messageHelper.setText(html, true);
 									
 									Set<String> set = files.keySet();
 					                for (String string : set) {
@@ -128,11 +133,12 @@ public class EmailServiceImpl implements EmailService{
 							};
 							
 							
-							logger.info("开始发送:"+emails.toString());
-							socketHandler.sendMessageToUsers(new TextMessage("开始发送:"+emails.toString()));
+							logger.info("开始发送");
+							socketHandler.sendMessageToUsers(new TextMessage("开始发送"));
 							
-							//javaMailSender.send(mimeMessagePreparator);
-							
+							javaMailSender.send(mimeMessagePreparator);
+							logger.info("Email:"+emails.toString());
+							socketHandler.sendMessageToUsers(new TextMessage("Email:"+emails.toString()));
 							logger.info("发送成功!");
 							socketHandler.sendMessageToUsers(new TextMessage("发送成功!"));
 							grabMailSendInfoMapper.insert(new GrabMailSendInfo(emails.toString(), "0", new Date(System.currentTimeMillis()), 1));

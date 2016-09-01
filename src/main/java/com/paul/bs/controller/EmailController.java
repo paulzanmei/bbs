@@ -1,6 +1,7 @@
 package com.paul.bs.controller;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.paul.bs.po.GrabCountry;
 import com.paul.bs.po.GrabEmailTemplate;
 import com.paul.bs.pojo.GrabCompanyPOJO;
 import com.paul.bs.pojo.GrabCountryPOJO;
+import com.paul.bs.pojo.SendEmailPOJO;
 import com.paul.bs.service.EmailService;
 import com.paul.bs.vo.TreeData;
 import com.sleepycat.je.tree.Tree;
@@ -37,6 +39,7 @@ public class EmailController {
 	@RequestMapping(value="/send",method=RequestMethod.GET)
 	public String send(ModelMap map){
 		map.put("grabcountrys", emailService.getAllGrabCountry());
+		map.put("grabEmailTemplates", emailService.selectList());
 		return "email";
 	}
 	
@@ -53,16 +56,14 @@ public class EmailController {
 	
 	@RequestMapping(value="/send",method=RequestMethod.POST)
 	@ResponseBody
-	public ModelMap send(@RequestBody List<GrabCompanyPOJO> grabCountryPOJO){
+	public ModelMap send(@RequestBody SendEmailPOJO sendEmailPOJO){
 		ModelMap map = new ModelMap();
-		if(grabCountryPOJO.isEmpty()){
+		if(sendEmailPOJO.getGrabCountryPOJO().isEmpty()){
 			map.put("msg", "请选择要发送的公司");
 			return map;
 		}
-		Map<String, Object> model = new HashMap<String,Object>();
-		Map<String,File> files = new HashMap<>();
-		files.put("a", new File(map.getClass().getResource("/img/log").getFile()));
-		boolean is = emailService.send(grabCountryPOJO, "zhuti", "template/register.vm", model, files);
+		
+		boolean is = emailService.send(sendEmailPOJO.getGrabCountryPOJO(), sendEmailPOJO.getTomplateId());
 		if(is){
 			map.put("msg", "ok");
 		}else{
@@ -108,6 +109,22 @@ public class EmailController {
 		emailTemplate.setUpdateId(1);
 		if(!emailService.updateByid(emailTemplate))
 			map.put("msg", "修改失败");
+		return map;
+	}
+	
+	@RequestMapping(value="/demo")
+	@ResponseBody
+	public ModelMap demo(){
+		ModelMap map = new ModelMap();
+		map.put("msg", "no");
+		URL url = EmailController.class.getResource("/../../");
+		map.put("url", url.getPath());
+		String s = System.getProperty("user.dir");
+		map.put("s", s);
+		File file = new File(url.getPath()+"/../bbs/userfiles/images/2.png");
+		if(file.exists()){
+			map.put("msg", "ok");
+		}
 		return map;
 	}
 }
