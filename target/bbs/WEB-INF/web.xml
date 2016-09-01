@@ -39,10 +39,6 @@
 		<servlet-name>ConnectorServlet</servlet-name>
 		<servlet-class>com.ckfinder.connector.ConnectorServlet</servlet-class>
 		<init-param>
-			<description>
-				Path to configuration file can be relative path inside application,
-				absolute path on local file system or UNC path.
-			</description>
 			<param-name>XMLConfig</param-name>
 			<param-value>/WEB-INF/config.xml</param-value>
 		</init-param>

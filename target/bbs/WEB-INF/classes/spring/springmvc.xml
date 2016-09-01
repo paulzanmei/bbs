@@ -27,8 +27,10 @@
 	<mvc:resources location="/css/" mapping="/css/**"/>
 	<mvc:resources location="/js/" mapping="/js/**"/>
 	<mvc:resources location="/img/" mapping="/img/**"/>
+	<mvc:resources location="/ckeditor/" mapping="/ckeditor/**"/>
+	<mvc:resources location="/ckfinder/" mapping="/ckfinder/**"/>
+	<mvc:resources location="/userfiles/" mapping="/userfiles/**"></mvc:resources>
 	
-
 	
 	<!-- 视图解析器  -->
 	<bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">

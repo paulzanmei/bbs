@@ -9,8 +9,8 @@
 <script type="text/javascript" src="${rc.contextPath}/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${rc.contextPath}/js/sdmenu.js"></script>
 <script type="text/javascript" src="${rc.contextPath}/js/laydate/laydate.js"></script>
-<script type="text/javascript" src="${rc.contextPath}/js/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="${rc.contextPath}/js/ckfinder/ckfinder.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/ckfinder/ckfinder.js"></script>
 </head>
 
 <body>
@@ -53,7 +53,7 @@
  <script type="text/javascript">
  $(document).ready(function(){
 	var editor = CKEDITOR.replace("email_text");
-	CKFinder.setupCKEditor( editor, '${rc.contextPath}/js/ckfinder' );
+	CKFinder.setupCKEditor( editor, '${rc.contextPath}/ckfinder' );
 	 $("#template_save").click(function(){
 		 var text = editor.getData();
 		 var name = $("#template_name").val();
