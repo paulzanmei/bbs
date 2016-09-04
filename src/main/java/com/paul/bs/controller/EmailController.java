@@ -23,7 +23,6 @@ import com.paul.bs.pojo.SendEmailPOJO;
 import com.paul.bs.service.EmailService;
 import com.paul.bs.vo.TreeData;
 import com.sleepycat.je.tree.Tree;
-import com.sun.tools.internal.ws.processor.model.Model;
 
 /**
  * 后台邮件发送控制器
