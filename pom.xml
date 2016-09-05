@@ -8,12 +8,12 @@
   <name>bbs Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
-    <dependency>
+    <!-- <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
-    </dependency>
+    </dependency> -->
     
     <dependency>
     	<groupId>log4j</groupId>
@@ -91,46 +91,24 @@
 	    <artifactId>velocity-tools</artifactId>
 	    <version>2.0</version>
 	</dependency>
-	<dependency>
+	<!-- <dependency>
     	<groupId>edu.uci.ics</groupId>
     	<artifactId>crawler4j</artifactId>
     	<version>4.2</version>
-    </dependency> 
-    <dependency>
-	  <!-- jsoup HTML parser library @ http://jsoup.org/ -->
+    </dependency> --> 
+    <!-- <dependency>
+	  jsoup HTML parser library @ http://jsoup.org/
 	  <groupId>org.jsoup</groupId>
 	  <artifactId>jsoup</artifactId>
 	  <version>1.9.2</version>
-	</dependency>
+	</dependency> -->
     <dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-databind</artifactId>
 	    <version>2.5.0</version>
 	</dependency>
   </dependencies>
-  <profiles>
-		<profile>
-			<!-- When built in OpenShift the 'openshift' profile will be used when 
-				invoking mvn. -->
-			<!-- Use this profile for any OpenShift specific customization your app 
-				will need. -->
-			<!-- By default that is to put the resulting archive into the 'webapps' 
-				folder. -->
-			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-			<id>openshift</id>
-			<build>
-				<finalName>bbs</finalName>
-				<plugins>
-					<plugin>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>2.1.1</version>
-						<configuration>
-							<outputDirectory>webapps</outputDirectory>
-							<warName>ROOT</warName>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+  <build>
+	<finalName>bbs</finalName>
+  </build>
 </project>
