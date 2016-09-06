@@ -115,7 +115,7 @@ public class EmailServiceImpl implements EmailService{
 									emails.deleteCharAt(emails.length()-1);
 									
 									
-									messageHelper.setFrom("paulzanmei<paulzanmei@163.com>");
+									messageHelper.setFrom("coco@topasia.com.cn");
 									messageHelper.setSubject(subject);
 									
 									mimeMessage.addHeader("X-Mailer", "Foxmail 7, 2, 7, 174[cn]");

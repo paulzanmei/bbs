@@ -18,14 +18,17 @@
 	<context:annotation-config />
 	
 	<bean class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.163.com"></property>
-		<property name="username" value="paulzanmei@163.com"></property>
-		<property name="password" value="ZHONGBAOLUO015"></property>
+		<property name="host" value="smtp.mxhichina.com"></property>
+		<property name="username" value="coco@topasia.com.cn"></property>
+		<property name="password" value="Asia123456"></property>
 		<property name="protocol" value="smtp"></property>
+		<property name="port" value="465"></property>
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.auth">true</prop>
-				<!-- <prop key="mail.debug">false</prop> -->
+				<!-- <prop key="mail.smtp.starttls.enable">true</prop> -->
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+				<prop key="mail.debug">false</prop>
 			</props>
 		</property>
 	</bean>
