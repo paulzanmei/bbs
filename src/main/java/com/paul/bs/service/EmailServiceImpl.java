@@ -30,6 +30,7 @@ import com.paul.bs.pojo.GrabCompanyInfoPOJO;
 import com.paul.bs.pojo.GrabCompanyPOJO;
 import com.paul.bs.pojo.GrabCountryPOJO;
 import com.paul.bs.socket.SocketHandler;
+import com.paul.bs.util.DateUtil;
 import com.paul.bs.util.ImgUtil;
 
 @Service
@@ -99,6 +100,7 @@ public class EmailServiceImpl implements EmailService{
 				int i = grabCompanyPOJO.getId();
 				final StringBuilder emails = new StringBuilder();
 				final List<GrabCompanyInfoPOJO> companyInfoPOJOs = grabCompanyPOJO.getChildren();
+				Date date = new Date(System.currentTimeMillis());
 				if(!companyInfoPOJOs.isEmpty()){
 					try{
 							MimeMessagePreparator mimeMessagePreparator = new MimeMessagePreparator() {
@@ -139,9 +141,9 @@ public class EmailServiceImpl implements EmailService{
 							javaMailSender.send(mimeMessagePreparator);
 							logger.info("Email:"+emails.toString());
 							socketHandler.sendMessageToUsers(new TextMessage("Email:"+emails.toString()));
-							logger.info("发送成功!");
+							logger.info("发送成功:"+DateUtil.formatYMDHMS(date));
 							socketHandler.sendMessageToUsers(new TextMessage("发送成功!"));
-							grabMailSendInfoMapper.insert(new GrabMailSendInfo(emails.toString(), "0", new Date(System.currentTimeMillis()), 1));
+							grabMailSendInfoMapper.insert(new GrabMailSendInfo(emails.toString(), "0", date, 1));
 							logger.info("还有"+(length-count)+"家公司等待发送");
 							socketHandler.sendMessageToUsers(new TextMessage("还有"+(length-count)+"家公司等待发送"));
 					
@@ -149,8 +151,9 @@ public class EmailServiceImpl implements EmailService{
 						//错误日志
 						emails.deleteCharAt(emails.length()-1);
 						logger.error("发送失败："+emails.toString());
+						logger.error(DateUtil.formatYMDHMS(date));
 						socketHandler.sendMessageToUsers(new TextMessage("发送失败："+emails.toString()));
-						grabMailSendInfoMapper.insert(new GrabMailSendInfo(emails.toString(), "1", new Date(System.currentTimeMillis()), 1));
+						grabMailSendInfoMapper.insert(new GrabMailSendInfo(emails.toString(), "1", date, 1));
 						logger.error(e.getMessage());
 						socketHandler.sendMessageToUsers(new TextMessage(e.getMessage()));
 					}
