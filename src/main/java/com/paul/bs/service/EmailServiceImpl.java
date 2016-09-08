@@ -159,7 +159,7 @@ public class EmailServiceImpl implements EmailService{
 					}
 					
 					if(count<length){
-						int a = (int)(1+Math.random()*10);
+						int a = (int)(1+Math.random()*5);
 						long b = a*(60*1000);
 						logger.info("停顿时间:"+a+"分钟");
 						socketHandler.sendMessageToUsers(new TextMessage("停顿时间:"+a+"分钟"));
